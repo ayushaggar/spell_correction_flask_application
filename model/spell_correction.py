@@ -14,6 +14,47 @@ def get_word(text):
     return re.findall('[a-z]+', text.lower())
 
 
+def prob_word(word):
+    global dictionary
+    global total_words
+    return dictionary[word] / total_words
+
+
+def dl_measure(word):
+    return max(diff_reorder(word), key=prob_word)
+
+
+def diff_reorder(word):
+    # Different combination of  spelling corrections for word
+    return (
+        known(
+            [word]) or known(
+            edition_1(word)) or known(
+                edition_2(word)) or [word])
+
+
+def known(words):
+    # check if word in dictionary or not
+    global dictionary
+    return set(w for w in words if w in dictionary)
+
+
+def edition_1(word):
+    # for all first edit in text
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+    splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
+    deletes = [L + R[1:] for L, R in splits if R]
+    transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R) > 1]
+    replaces = [L + c + R[1:] for L, R in splits if R for c in letters]
+    inserts = [L + c + R for L, R in splits for c in letters]
+    return set(deletes + transposes + replaces + inserts)
+
+
+def edition_2(word):
+    # for all second edit in text.... can do more depending on user type
+    return (e2 for e1 in edition_1(word) for e2 in edition_1(e1))
+
+
 def deEmojify(inputString):
     return inputString.encode('ascii', 'ignore').decode('ascii')
 
@@ -36,6 +77,7 @@ def main(input_text, path_to_sample):
     dictionary = Counter(get_word(open(path_to_sample).read()))
     max_word_count = max(map(len, dictionary))
     total_words = float(sum(dictionary.values()))
-    reduce_lengthening(
-                remove_special_character(
-                    deEmojify(input_text)))
+    dl_measure(
+        reduce_lengthening(
+            remove_special_character(
+                deEmojify(input_text))))
