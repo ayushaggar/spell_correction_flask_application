@@ -94,7 +94,12 @@ def main(input_text, path_to_sample):
     dictionary = Counter(get_word(open(path_to_sample).read()))
     max_word_count = max(map(len, dictionary))
     total_words = float(sum(dictionary.values()))
-    find_words(dl_measure(
-        reduce_lengthening(
-            remove_special_character(
-                deEmojify(input_text)))))
+    words = find_words(
+        dl_measure(
+            reduce_lengthening(
+                remove_special_character(
+                    deEmojify(input_text)))))
+    result_list = []
+    for word in words:
+        result_list.append(dl_measure(word))
+    return result_list
