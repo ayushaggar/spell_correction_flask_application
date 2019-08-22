@@ -23,6 +23,12 @@ def remove_special_character(inputString):
     return re.sub('[^A-Za-z]+', '', inputString)
 
 
+def reduce_lengthening(inputString):
+    # assuming in english 3 same character not occur together
+    pattern = re.compile(r"(.)\1{2,}")
+    return pattern.sub(r"\1\1", inputString).lower()
+
+
 def main(input_text, path_to_sample):
     global dictionary
     global max_word_count
@@ -30,5 +36,6 @@ def main(input_text, path_to_sample):
     dictionary = Counter(get_word(open(path_to_sample).read()))
     max_word_count = max(map(len, dictionary))
     total_words = float(sum(dictionary.values()))
-    remove_special_character(
-                    deEmojify(input_text))
+    reduce_lengthening(
+                remove_special_character(
+                    deEmojify(input_text)))
