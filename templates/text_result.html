@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Result</title>
+  </head>
+   <body>
+    <h1>Text Result</h1>
+    <form action = "{{ url_for('text_read') }}">
+       <input type="submit" value="New Request" />
+    <br>
+    <br>
+    <label for="input_text">Input</label>
+    <input name = "input_text" type = "text" size="50" value = "{{ text_input }}" readonly/ >
+    <label for="output_text">Output</label>
+    <input name = "output_text" type = "text" size="50" value = "{{ text_output }}" readonly/ >
+    </form>
+   </body>
+</html>
