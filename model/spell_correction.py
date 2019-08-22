@@ -69,6 +69,23 @@ def reduce_lengthening(inputString):
     pattern = re.compile(r"(.)\1{2,}")
     return pattern.sub(r"\1\1", inputString).lower()
 
+# Given dictionary of words with their frequencies, function splits text
+# at positions that give overall most likely words.
+def find_words(text):
+    global max_word_count
+    probs, lasts = [1.0], [0]
+    for i in range(1, len(text) + 1):
+        prob_k, k = max((probs[j] * prob_word(text[j:i]), j)
+                        for j in range(max(0, i - max_word_count), i))
+        probs.append(prob_k)
+        lasts.append(k)
+    words = []
+    i = len(text)
+    while 0 < i:
+        words.append(text[lasts[i]:i])
+        i = lasts[i]
+    words.reverse()
+    return words
 
 def main(input_text, path_to_sample):
     global dictionary
@@ -77,7 +94,7 @@ def main(input_text, path_to_sample):
     dictionary = Counter(get_word(open(path_to_sample).read()))
     max_word_count = max(map(len, dictionary))
     total_words = float(sum(dictionary.values()))
-    dl_measure(
+    find_words(dl_measure(
         reduce_lengthening(
             remove_special_character(
-                deEmojify(input_text))))
+                deEmojify(input_text)))))
