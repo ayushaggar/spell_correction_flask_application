@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spell Correct Flask App</title>
+  </head>
+   <body>
+     <h1>Write Text for Spell Correction</h1>
+     <h2> # some cases handled This😁dog😻😀مرحبا你好Φ#@123:🇮🇳, homeAsssingment, homeAsssignment, schoolbag, speling, correctud, inlaw <h2>
+      <form action = "{{ url_for('process_text_result') }}" method = "POST"
+         enctype = "multipart/form-data">
+         <label for="text">Input</label>
+         <input type = "text" size="50" name = "text" />
+         <br>
+         <br>
+         <br>
+         <input type = "submit" value = "Correct Spell"/ >
+      </form>
+
+   </body>
+</html>
