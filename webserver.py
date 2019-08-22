@@ -45,7 +45,7 @@ def process_text_result():
         "sample_text_books.txt")
     processed_text_output = spell_correction.main(input_text, path_to_sample)
     print('Pre-processing done! \n')
-    text_result['text_output'] = processed_text_output
+    text_result['text_output'] = ', '.join(processed_text_output)
     return show_text_result(text_result)
 
 
